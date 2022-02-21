@@ -1,0 +1,19 @@
+:root {
+    font-size: 16px;
+}
+
+svg {
+    width: 14rem;
+    height: 14rem;
+}
+
+form * {
+    font-size: 1.75rem;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+}
+
+form > input[type=submit] {
+    background: yellow;
+    border-radius: 0.3em;
+}

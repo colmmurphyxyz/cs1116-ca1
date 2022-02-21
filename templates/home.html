@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% import 'macros.html' as macros %}
+
+{% block main_content %}
+    <section>
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            {{ form.sort_by.label }}
+            {{ form.sort_by() }}
+            {{ form.recent.label }}
+            {{ form.recent() }}
+            {{ form.submit() }}
+        </form>
+    </section>
+    <section id="posts">
+        <h2>{{ form.sort_by.data }} posts from {{ form.recent.data }}</h2>
+        {% for post in posts %}
+            <section class="post">
+                <h3>{{ post.submission_time }}</h3>
+                <p>{{ post.likes }} likes</p>
+                {{ macros.render_post(post.background, post.message) }}
+            </section>
+        {% endfor %}
+    </section>
+{% endblock %}

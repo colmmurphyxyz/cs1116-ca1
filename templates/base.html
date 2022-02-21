@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='styles/root.css') }}" />
+        {% endblock %}
+        <title>ca1</title>
+    </head>
+    <body>
+        <header>
+            {% block base_header %}
+            {% endblock %}
+        </header>
+        <main>
+            {% block main_content %}
+            {% endblock %}
+        </main>
+        <footer>
+            {% block base_footer %}
+            {% endblock %}
+        </footer>
+    </body>
+</html>

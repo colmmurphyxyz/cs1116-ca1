@@ -1,0 +1,11 @@
+{% macro render_post(color, content) %}
+    <svg>
+        <rect width="100%" height="100%" style="fill:{{ color }};"></rect>
+        <!-- shamelessly copy-pasted from https://codepen.io/maxzz/pen/NzBGVE-->
+        <foreignObject x="0" y="0" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                {{ content }}
+            </div>
+        </foreignObject>
+    </svg>
+{% endmacro %}
