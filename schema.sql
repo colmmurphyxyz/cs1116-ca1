@@ -41,4 +41,4 @@ INSERT INTO posts (author_id, message, background, submission_time, likes)
 VALUES
        (1, 'hello', 'blue', '2022-02-18 12:12:12', 69),
        (2, 'world', 'red', '2022-02-17 13:13:13', 420),
-       (3, '!!!!!!!!!!!', 'pink', '2022-02-19-13:47:23', -5);
+       (3, '!!!!!!!!!!!', 'pink', '2022-02-19 13:47:23', -5);

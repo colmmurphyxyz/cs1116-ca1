@@ -2,19 +2,24 @@
 
 {% import 'macros.html' as macros %}
 
+{% block stylesheets %}
+    {{ macros.multiple_stylesheets(['root.css', 'styles.css']) }}
+{% endblock %}
+
+{% block base_header %}
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        {{ form.sort_by.label }}
+        {{ form.sort_by() }}
+        {{ form.recent.label }}
+        {{ form.recent() }}
+        {{ form.submit() }}
+    </form>
+{% endblock %}
+
 {% block main_content %}
-    <section>
-        <form action="" method="POST" novalidate>
-            {{ form.hidden_tag() }}
-            {{ form.sort_by.label }}
-            {{ form.sort_by() }}
-            {{ form.recent.label }}
-            {{ form.recent() }}
-            {{ form.submit() }}
-        </form>
-    </section>
+    <h2>{{ form.sort_by.data }} posts from {{ form.recent.data }}</h2>
     <section id="posts">
-        <h2>{{ form.sort_by.data }} posts from {{ form.recent.data }}</h2>
         {% for post in posts %}
             <section class="post">
                 <h3>{{ post.submission_time }}</h3>

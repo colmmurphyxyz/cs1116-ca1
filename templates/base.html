@@ -1,9 +1,10 @@
+{% import 'macros.html' as macros %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ url_for('static', filename='styles/root.css') }}" />
         {% endblock %}
         <title>ca1</title>
     </head>

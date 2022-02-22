@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from database import get_db, close_db
 from forms import HomePageForm
+from datetime import *
 
 app = Flask(__name__)
 app.teardown_appcontext(close_db)
@@ -37,4 +38,14 @@ def home():
     query += ";"
 
     posts = db.execute(query).fetchall()
-    return render_template("home.html", form=form, posts=posts)
+    posts_formatted = []
+    for post in posts:
+        posts_formatted.append(
+            {
+                "message": post["message"],
+                "background": post["background"],
+                "submission_time": datetime.strptime(post["submission_time"], "%Y-%m-%d %H:%M:%S").strftime("%d %b"),
+                "likes": post["likes"]
+            }
+        )
+    return render_template("home.html", form=form, posts=posts_formatted)

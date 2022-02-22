@@ -9,3 +9,13 @@
         </foreignObject>
     </svg>
 {% endmacro %}
+
+{% macro stylesheet(file_name) %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/' + file_name) }}" />
+{% endmacro %}
+
+{% macro multiple_stylesheets(file_names) %}
+    {% for file_name in file_names %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/' + file_name) }}" />
+    {% endfor %}
+{% endmacro %}
