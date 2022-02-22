@@ -1,0 +1,33 @@
+#posts {
+    display: flex;
+}
+
+.post {
+
+}
+
+.post > h3 {
+    float: top;
+    text-align: right;
+}
+
+.post > p {
+    float: top;
+    text-align: left;
+}
+
+svg {
+    width: 14rem;
+    height: 14rem;
+}
+
+form * {
+    font-size: 1.75rem;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+}
+
+form > input[type=submit] {
+    background: yellow;
+    border-radius: 0.3em;
+}
