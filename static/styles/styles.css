@@ -1,24 +1,55 @@
+@import "root.css";
+
 #posts {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 .post {
+    display: grid;
+    grid-template-areas:
+        "likes      date"
+        "post       post";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 2rem 2fr;
 
+    margin: 1.2em;
 }
 
 .post > h3 {
-    float: top;
+    grid-area: date;
+    margin: 0;
+    padding-right: 1rem;
     text-align: right;
 }
 
 .post > p {
-    float: top;
+    grid-area: likes;
+    font-size: 1.17em;
+    margin: 0;
+    padding-left: 1rem;
     text-align: left;
 }
 
-svg {
+.post > svg {
+    grid-area: post;
     width: 14rem;
     height: 14rem;
+
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+svg div {
+    display: table-cell;
+    width: 100%;
+    height: 2fr;
+    padding: 10px;
+    /*border: 3px dashed #1c87c9;*/
+    vertical-align: middle;
+    text-align: center;
 }
 
 form * {

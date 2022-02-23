@@ -1,0 +1,13 @@
+#!/usr/bin/sh
+START=$(date +%s);
+if [ ! -f ../app.db ]; then
+    touch ../app.db;
+fi
+rm schema.sql populate_likes_table.sql;
+python3 create_schema.py;
+sqlite3 ../app.db ".read schema.sql";
+sqlite3 ../app.db ".read populate_likes_table.sql";
+END=$(date +%s);
+echo -n "Finished, took ";
+expr $END - $START;
+echo "seconds";
