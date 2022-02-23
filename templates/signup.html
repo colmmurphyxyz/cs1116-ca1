@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% import "macros.html" as macros %}
+
+{% block main_content %}
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        {{ macros.label_field_errors(form.username) }}
+        <br />
+        {{ macros.label_field_errors(form.password) }}
+        <br />
+        {{ macros.label_field_errors(form.password2) }}
+        <br />
+        {{ form.submit() }}
+    </form>
+{% endblock %}

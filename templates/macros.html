@@ -19,3 +19,11 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/' + file_name) }}" />
     {% endfor %}
 {% endmacro %}
+
+{% macro label_field_errors(field) %}
+    {{ field.label }}
+    {{ field() }}
+    {% for error in field.errors %}
+        {{ error }}
+    {% endfor %}
+{% endmacro %}

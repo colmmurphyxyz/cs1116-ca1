@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
+from werkzeug.security import generate_password_hash
 from database import get_db, close_db
-from forms import HomePageForm
+from forms import HomePageForm, SignUpForm
 from datetime import *
 
 app = Flask(__name__)
@@ -34,7 +35,7 @@ def home():
     if sort_by == "most recent":
         query += "ORDER BY submission_time DESC"
     else:   # elif sort_by == "most popular"
-        query += ""     # i haven't implemented likes yet lol
+        query += "ORDER BY likes DESC"     # i haven't implemented likes yet lol
     query += ";"
 
     posts = db.execute(query).fetchall()
@@ -49,3 +50,16 @@ def home():
             }
         )
     return render_template("home.html", form=form, posts=posts_formatted)
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    form = SignUpForm()
+    username = ""
+    password = ""
+    if form.validate_on_submit():
+        username = form.username.data
+        password_hash = generate_password_hash(form.password.data)
+        db = get_db()
+        db.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (username, password_hash))
+        db.commit()
+    return render_template("signup.html", form=form)
