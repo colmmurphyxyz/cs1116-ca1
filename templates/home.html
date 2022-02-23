@@ -24,7 +24,10 @@
             <section class="post">
                 <h3>{{ post.submission_time }}</h3>
                 <p>{{ post.likes }} likes</p>
-                {{ macros.render_post(post.background, post.message) }}
+                <div style="background:{{ post.background }};">
+                    {{ post.message }}
+                </div>
+{#                {{ macros.render_post(post.background, post.message) }}#}
             </section>
         {% endfor %}
     </section>
