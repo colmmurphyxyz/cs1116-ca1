@@ -22,7 +22,7 @@ def home():
     sort_by = form.sort_by.data
     recent = form.recent.data
 
-    query = "SELECT message, background, submission_time, likes FROM posts WHERE submission_time >= "
+    query = "SELECT id, message, background, submission_time FROM posts WHERE submission_time >= "
     if recent == "today":
         query += "datetime('now', '-24 hours')"
     elif recent == 'this week':
@@ -41,12 +41,13 @@ def home():
     posts = db.execute(query).fetchall()
     posts_formatted = []
     for post in posts:
+        likes = db.execute("SELECT COUNT(*) AS 'likes' FROM likes WHERE post_id = ?;", (post["id"],)).fetchone()["likes"]
         posts_formatted.append(
             {
                 "message": post["message"],
                 "background": post["background"],
                 "submission_time": datetime.strptime(post["submission_time"], "%Y-%m-%d %H:%M:%S").strftime("%d %b"),
-                "likes": post["likes"]
+                "likes": likes
             }
         )
     return render_template("home.html", form=form, posts=posts_formatted)

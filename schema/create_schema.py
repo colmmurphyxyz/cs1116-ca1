@@ -31,8 +31,7 @@ CREATE TABLE posts
     author_id INTEGER NOT NULL,
     message TEXT NOT NULL,
     background TEXT NOT NULL,
-    submission_time TEXT NOT NULL,
-    likes INTEGER NOT NULL
+    submission_time TEXT NOT NULL
 );
 DROP TABLE IF EXISTS likes;
 
@@ -66,7 +65,7 @@ def write_dummy_post_rows(file):
         start_date = datetime.strptime("2022-01-01 12:00:00", "%Y-%m-%d %H:%M:%S")
         end_date = datetime.strptime("2022-12-31 12:00:00", "%Y-%m-%d %H:%M:%S")
         submission_time = faker.date_time_between(start_date, end_date).strftime("%Y-%m-%d %H:%M:%S")
-        file.write(f"   ({author_id}, '{text}', '{background}', '{submission_time}', {likes}),\n")
+        file.write(f"   ({author_id}, '{text}', '{background}', '{submission_time}'),\n")
     file.write("    (1, 'Hello World', 'green', '2022-03-02 13:31:31', 123);")
     likesFile.write("(69, 429);")
     likesFile.close()
