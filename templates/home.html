@@ -19,6 +19,7 @@
 
 {% block main_content %}
     <h2>{{ form.sort_by.data }} posts from {{ form.recent.data }}</h2>
+    <h3><a href="{{ url_for('create_post') }}">New Post</a></h3>
     <section id="posts">
         {% for post in posts %}
             <section class="post">
@@ -27,7 +28,6 @@
                 <div style="background:{{ post.background }};">
                     {{ post.message }}
                 </div>
-{#                {{ macros.render_post(post.background, post.message) }}#}
             </section>
         {% endfor %}
     </section>

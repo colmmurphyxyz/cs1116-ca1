@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% import 'macros.html' as macros %}
+
+{% block main_content %}
+    <h1>Create a new post</h1>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {{ macros.label_field_errors(form.message) }}
+        <br />
+        {{ form.color.label }}
+        {{ form.color() }}
+        <br />
+        {{ form.submit() }}
+    </form>
+{% endblock %}

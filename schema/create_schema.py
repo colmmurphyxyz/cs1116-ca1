@@ -46,13 +46,13 @@ CREATE TABLE likes
 
 
 def write_dummy_post_rows(file):
-    background_choices = ["red", "blue", "pink", "yellow", "green"]
-    file.write("""INSERT INTO POSTS (author_id, message, background, submission_time, likes) VALUES\n""")
+    color_scheme = ["#ff7070", "#adadff", "#adffad", "#ffd6dd", "#ffff5c"]
+    file.write("""INSERT INTO POSTS (author_id, message, background, submission_time) VALUES\n""")
     likesFile = open("populate_likes_table.sql", "a")
     likesFile.write("""INSERT INTO likes (post_id, liker_id) VALUES\n""")
     for i in range(1, 1001):
         author_id = randint(1, num_users)
-        background = choice(background_choices)
+        background = choice(color_scheme)
 
         # create a row in the likes table for every like the post has
         likes = randint(0, 300)
@@ -66,7 +66,7 @@ def write_dummy_post_rows(file):
         end_date = datetime.strptime("2022-12-31 12:00:00", "%Y-%m-%d %H:%M:%S")
         submission_time = faker.date_time_between(start_date, end_date).strftime("%Y-%m-%d %H:%M:%S")
         file.write(f"   ({author_id}, '{text}', '{background}', '{submission_time}'),\n")
-    file.write("    (1, 'Hello World', 'green', '2022-03-02 13:31:31', 123);")
+    file.write("    (1, 'Hello World', 'green', '2022-03-02 13:31:31');")
     likesFile.write("(69, 429);")
     likesFile.close()
 
