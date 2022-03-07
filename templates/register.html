@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 
-{% import "macros.html" as macros %}
+{% import 'macros.html' as macros %}
 
 {% block main_content %}
-    <h1>Create an account</h1>
-    <form action="" method="POST" novalidate>
+    <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         {{ macros.label_field_errors(form.username) }}
         <br />
@@ -14,7 +13,4 @@
         <br />
         {{ form.submit() }}
     </form>
-    <p>
-        Already have an account? <a href="{{ url_for('login') }}">Log in here!</a>
-    </p>
 {% endblock %}

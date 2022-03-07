@@ -16,15 +16,14 @@ class HomePageForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
-class SignUpForm(FlaskForm):
+class RegistrationForm(FlaskForm):
     username = StringField("Username:",
                            validators=[InputRequired(), Length(4, 20)])
-    password = PasswordField("Password:",
+    password = PasswordField("Password",
                              validators=[InputRequired(), Length(min=6)])
-    password2 = PasswordField("Re-enter your password",
-                              validators=[EqualTo("password")])
+    password2 = PasswordField("Re-enter password:",
+                              validators=[InputRequired(), EqualTo("password")])
     submit = SubmitField()
-
 
 class LoginForm(FlaskForm):
     username = StringField("Username:",
@@ -39,4 +38,9 @@ class CreatePostForm(FlaskForm):
     color = RadioField("Background colour",
                        validators=[InputRequired()],
                        choices=color_scheme.keys())
+    submit = SubmitField()
+
+class CommentForm(FlaskForm):
+    comment = StringField("Comment:",
+                          validators=[InputRequired(), Length(max=150)])
     submit = SubmitField()

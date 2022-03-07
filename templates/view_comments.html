@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% import 'macros.html' as macros %}
+
+{% block stylesheets %}
+    {{ macros.multiple_stylesheets(['root.css', 'home.css']) }}
+{% endblock %}
+
+{% block main_content %}
+    <section class="post">
+        <h3>{{ post.submission_time }}</h3>
+        <p id="likes-and-submission-time">
+            {% if post.is_liked %}
+                <a href="{{ url_for('unlike_post', post_id=post.id) }}">{{ macros.heart('#ff0000') }}</a>
+            {% else %}
+                <a href="{{ url_for('like_post', post_id=post.id) }}">{{ macros.heart('#ffffff') }}</a>
+            {%  endif %}
+            {{ likes }} likes
+        </p>
+        <div style="background:{{ post.background }};">
+            {{ post.message }}
+        </div>
+        <p id="comments">
+            <a href="{{ url_for('view_comments', post_id=post['id']) }}">
+                {{ macros.speech_bubble() }} {{ post.num_comments }} comments
+            </a>
+        </p>
+    </section>
+
+    <section>
+        <h2>
+            {{ comments|length }} Comments
+        </h2>
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    <strong>{{ comment.author }}:</strong> {{ comment.content }}
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section>
+        <h2>Write a comment</h2>
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            {{ macros.label_field_errors(form.comment) }}
+            {{ form.submit() }}
+        </form>
+    </section>
+{% endblock %}

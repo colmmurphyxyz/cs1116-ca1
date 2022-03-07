@@ -1,7 +1,4 @@
 .env
 .flaskenv
 __pycache__
-app.db
-schema/schema.sql
-/schema/schema.sql
 /schema/populate_likes_table.sql

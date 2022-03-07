@@ -15,3 +15,50 @@
         {{ error }}
     {% endfor %}
 {% endmacro %}
+
+{% macro heart(color) %}
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300.000000 300.000000" preserveAspectRatio="xMidYMid " class="svg" style="width: 16px; height: 16px;">
+        <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="{{ color }}" stroke="#000000">
+        <path d="M700 2699 c-282 -64 -479 -276 -521 -559 -12 -88 -7 -261 12 -380 10
+        -63 45 -185 59 -205 4 -5 13 -26 20 -45 57 -145 258 -366 599 -660 93 -79 245
+        -213 325 -284 38 -33 74 -65 80 -71 6 -5 60 -54 119 -108 l107 -99 107 99 c59
+        54 113 103 119 108 6 6 42 38 80 71 80 71 232 205 325 284 341 294 542 515
+        599 660 7 19 16 40 20 45 14 20 49 142 59 205 19 119 24 292 12 380 -43 289
+        -243 499 -532 560 -162 34 -299 16 -456 -62 -98 -48 -237 -171 -293 -258 -18
+        -28 -36 -50 -40 -50 -4 0 -22 22 -40 50 -17 27 -71 87 -119 132 -180 171 -412
+        239 -641 187z" id="node1" class="node" stroke-width="250"></path>
+        </g>
+        <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#FFFFFF" stroke="none">
+        </g>
+    </svg>
+{% endmacro %}
+
+{% macro speech_bubble() %}
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="width:16px; height:16px;">
+        <ellipse cx="8" cy="8" rx="7" ry="5"
+            style="fill:black;stroke:black;stroke-width:2"></ellipse>
+        <polygon points="1,15 3,8 14,8" style="fill:black;stroke:black;stroke-width:1"></polygon>
+    </svg>
+{% endmacro %}
+
+{% macro render_post(post) %}
+    <section class="post">
+        <h3>{{ post.submission_time }}</h3>
+        <p id="likes-and-submission-time">
+            {% if post.is_liked %}
+                <a href="{{ url_for('unlike_post', post_id=post.id) }}">{{ heart('#ff0000') }}</a>
+            {% else %}
+                <a href="{{ url_for('like_post', post_id=post.id) }}">{{ heart('#ffffff') }}</a>
+            {%  endif %}
+            {{ post.likes }} likes
+        </p>
+        <div style="background:{{ post.background }};">
+            {{ post.message }}
+        </div>
+        <p id="comments">
+            <a href="{{ url_for('view_comments', post_id=post['id']) }}">
+                {{ speech_bubble() }} {{ post.num_comments }} comments
+            </a>
+        </p>
+    </section>
+{% endmacro %}

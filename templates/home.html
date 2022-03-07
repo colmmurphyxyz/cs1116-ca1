@@ -3,7 +3,7 @@
 {% import 'macros.html' as macros %}
 
 {% block stylesheets %}
-    {{ macros.multiple_stylesheets(['root.css', 'styles.css']) }}
+    {{ macros.multiple_stylesheets(['root.css', 'home.css']) }}
 {% endblock %}
 
 {% block base_header %}
@@ -22,13 +22,7 @@
     <h3><a href="{{ url_for('create_post') }}">New Post</a></h3>
     <section id="posts">
         {% for post in posts %}
-            <section class="post">
-                <h3>{{ post.submission_time }}</h3>
-                <p>{{ post.likes }} likes</p>
-                <div style="background:{{ post.background }};">
-                    {{ post.message }}
-                </div>
-            </section>
+            {{ macros.render_post(post) }}
         {% endfor %}
     </section>
 {% endblock %}
