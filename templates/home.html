@@ -15,14 +15,17 @@
         {{ form.recent() }}
         {{ form.submit() }}
     </form>
+    {% if g.user %}
+        <h1>Welcome back {{ g.user }}. <a href="{{ url_for('view_profile') }}">View your profile</a></h1>
+    {% endif %}
 {% endblock %}
 
 {% block main_content %}
-    <h2>{{ form.sort_by.data }} posts from {{ form.recent.data }}</h2>
+    <h2>{{ session["sort_by"] }} posts from {{ session["recent"] }}</h2>
     <h3><a href="{{ url_for('create_post') }}">New Post</a></h3>
     <section id="posts">
         {% for post in posts %}
-            {{ macros.render_post(post) }}
+            {{ macros.render_post(post, next) }}
         {% endfor %}
     </section>
 {% endblock %}

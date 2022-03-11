@@ -41,14 +41,14 @@
     </svg>
 {% endmacro %}
 
-{% macro render_post(post) %}
+{% macro render_post(post, next) %}
     <section class="post">
         <h3>{{ post.submission_time }}</h3>
         <p id="likes-and-submission-time">
             {% if post.is_liked %}
-                <a href="{{ url_for('unlike_post', post_id=post.id) }}">{{ heart('#ff0000') }}</a>
+                <a href="{{ url_for('unlike_post', post_id=post.id, next=next) }}">{{ heart('#ff0000') }}</a>
             {% else %}
-                <a href="{{ url_for('like_post', post_id=post.id) }}">{{ heart('#ffffff') }}</a>
+                <a href="{{ url_for('like_post', post_id=post.id, next=next) }}">{{ heart('#ffffff') }}</a>
             {%  endif %}
             {{ post.likes }} likes
         </p>

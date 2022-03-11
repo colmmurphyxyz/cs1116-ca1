@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% import 'macros.html' as macros %}
+
+{% block stylesheets %}
+    {{ macros.multiple_stylesheets(['root.css', 'home.css']) }}
+{% endblock %}
+
+{% block main_content %}
+    <h1>Posts by {{ g.user }}</h1>
+    <section id="posts">
+        {% for post in posts %}
+            {{ macros.render_post(post, 'view_profile') }}
+        {% endfor %}
+    </section>
+{% endblock %}

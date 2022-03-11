@@ -67,7 +67,7 @@ def random_datetime_this_year():
 
 
 def write_dummy_post_rows(file):
-    color_scheme = ["#ff7070", "#adadff", "#adffad", "#ffd6dd", "#ffff5c"]
+    color_scheme = ["#ff7070", "#adadff", "#adffad", "#ff99aa", "#e0e000"]
     file.write("""INSERT INTO POSTS (author, message, background, submission_time) VALUES\n""")
     likesFile = open("populate_likes_table.sql", "a")
     likesFile.write("""INSERT INTO likes (post_id, liker) VALUES\n""")

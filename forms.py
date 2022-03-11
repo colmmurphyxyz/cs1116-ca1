@@ -1,18 +1,18 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, RadioField, SelectField, StringField, SubmitField
+from wtforms import PasswordField, RadioField, SelectField, StringField, SubmitField, TextAreaField
 from wtforms.validators import EqualTo, InputRequired, Length
 
-color_scheme = {"congo-pink": "#ff7070",
+color_scheme = {"congo pink": "#ff7070",
                 "blue-purple":  "#adadff",
-                "tea-green": "#adffad",
+                "mint green": "#adffad",
                 "piggy-pink": "#ffd6dd",
-                "laser-lemon": "#ffff5c"}
+                "titanium yellow": "#ffff5c"}
 
 class HomePageForm(FlaskForm):
     sort_by = SelectField(label="Show me the ", choices=["most recent", "most popular"],
-                          default="most recent")
+                          validators=[InputRequired()])
     recent = SelectField(label="posts from", choices=["today", "this week", "this month", "all time"],
-                         default="this week")
+                         validators=[InputRequired()])
     submit = SubmitField("Submit")
 
 
@@ -44,3 +44,4 @@ class CommentForm(FlaskForm):
     comment = StringField("Comment:",
                           validators=[InputRequired(), Length(max=150)])
     submit = SubmitField()
+

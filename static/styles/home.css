@@ -23,6 +23,10 @@
     text-align: right;
 }
 
+.post > h3:hover {
+    background: lightgray;
+}
+
 #likes-and-submission-time {
     grid-area: likes;
     font-size: 1.17em;
@@ -31,13 +35,16 @@
     text-align: left;
 }
 
+#likes-and-submission-time:hover {
+    background: lightgray;
+}
+
 .post > div {
     grid-area: post;
     width: 14rem;
     height: 14rem;
     display: table-cell;
     padding: 10px;
-    /*border: 3px dashed #1c87c9;*/
     vertical-align: middle;
     text-align: center;
 
@@ -49,7 +56,12 @@
     grid-area: comments;
     min-height: 2rem;
     padding-left: 1rem;
-    margin-top: 0.25rem;
+    padding-top: 0.25rem;
+    margin-top: 0;
+}
+
+#comments:hover {
+    background: lightgray;
 }
 
 #comments a {

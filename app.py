@@ -16,9 +16,11 @@ Session(app)
 def current_datetime_sql_format():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+
 @app.before_request
 def load_logged_in_user():
     g.user = session.get("username", None)
+
 
 def login_required(view):
     @wraps(view)
@@ -29,16 +31,21 @@ def login_required(view):
 
     return wrapped_view
 
+
 @app.route("/")
 def root():
     return render_template("base.html")
+
 
 @app.route("/home", methods=["GET", "POST"])
 def home():
     db = get_db()
     form = HomePageForm()
-    sort_by = form.sort_by.data
-    recent = form.recent.data
+    if form.validate_on_submit():
+        session["sort_by"] = form.sort_by.data
+        session["recent"] = form.recent.data
+    sort_by = session.get("sort_by", "most recent")
+    recent = session.get("recent", "this week")
 
     if recent == "today":
         recent_posts_limit = "datetime('now', '-24 hours')"
@@ -87,7 +94,7 @@ def home():
                 "num_comments": num_comments
             }
         )
-    return render_template("home.html", form=form, posts=posts_formatted)
+    return render_template("home.html", form=form, posts=posts_formatted, next="home")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -116,6 +123,7 @@ def login():
                 next_page = url_for("home")
             return redirect(next_page)
     return render_template("login.html", form=form)
+
 
 @app.route("/logout")
 def logout():
@@ -156,6 +164,7 @@ def create_post():
         return redirect(url_for("home"))
     return render_template("create_post.html", form=form)
 
+
 @app.route("/like_post/<int:post_id>")
 @login_required
 def like_post(post_id):
@@ -166,7 +175,11 @@ def like_post(post_id):
         db.execute("""INSERT INTO likes (post_id, liker) VALUES
                 (?, ?);""", (post_id, session["username"]))
         db.commit()
-    return redirect(url_for("home"))
+    next_page = request.args.get("next")
+    if not next_page:
+        next_page = "home"
+    return redirect(url_for(next_page))
+
 
 @app.route("/unlike_post/<int:post_id>")
 @login_required
@@ -175,7 +188,12 @@ def unlike_post(post_id):
     db.execute("""DELETE FROM likes
             WHERE post_id = ? AND liker = ?;""", (post_id, session["username"]))
     db.commit()
-    return redirect(url_for("home"))
+    next_page = request.args.get("next")
+    print(f"{next_page=}")
+    if not next_page:
+        next_page = url_for("home")
+    return redirect(url_for(next_page))
+
 
 @app.route("/view_comments/<int:post_id>", methods=["GET", "POST"])
 @login_required
@@ -184,6 +202,8 @@ def view_comments(post_id):
     db = get_db()
     post = db.execute("""SELECT id, message, background, submission_time FROM posts WHERE id = ?;""",
                       (post_id,)).fetchone()
+    is_liked = db.execute("""SELECT * FROM likes
+                WHERE post_id = ? AND liker = ?""", (post["id"], session["username"])).fetchone() is not None
 
     if form.validate_on_submit():
         comment = form.comment.data
@@ -195,4 +215,34 @@ def view_comments(post_id):
         FROM comments
         WHERE post_id = ?;""", (post_id,)).fetchall()
     likes = db.execute("SELECT COUNT(*) AS 'likes' FROM likes WHERE post_id = ?;", (post["id"],)).fetchone()["likes"]
-    return render_template("view_comments.html", post=post, comments=comments, likes=likes, form=form)
+    return render_template("view_comments.html", post=post, is_liked=is_liked,
+                           comments=comments, likes=likes, form=form)
+
+
+@app.route("/view_profile")
+@login_required
+def view_profile():
+    db = get_db()
+    posts = db.execute("""SELECT id, message, background, submission_time FROM posts WHERE author = ?;""",
+                       (session["username"],)).fetchall()
+    posts_formatted = []
+    for post in posts:
+        num_comments = db.execute("""SELECT COUNT(*)
+                FROM comments
+                WHERE post_id = ?;""", (post["id"],)).fetchone()["COUNT(*)"]
+        is_liked = db.execute("""SELECT * FROM likes
+                    WHERE post_id = ? AND liker = ?""", (post["id"], session["username"])).fetchone() is not None
+        likes = db.execute("SELECT COUNT(*) AS 'likes' FROM likes WHERE post_id = ?;", (post["id"],)).fetchone()[
+            "likes"]
+        posts_formatted.append(
+            {
+                "id": post["id"],
+                "message": post["message"],
+                "background": post["background"],
+                "submission_time": datetime.strptime(post["submission_time"], "%Y-%m-%d %H:%M:%S").strftime("%d %b"),
+                "likes": likes,
+                "is_liked": is_liked,
+                "num_comments": num_comments
+            }
+        )
+    return render_template("profile.html", posts=posts_formatted)
