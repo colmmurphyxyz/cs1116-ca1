@@ -5,4 +5,6 @@ __pycache__
 .flaskenv
 flask_session
 
+app.db
+
 /schema/populate_likes_table.sql
