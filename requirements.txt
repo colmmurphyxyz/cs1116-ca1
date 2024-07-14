@@ -1,0 +1,4 @@
+flask
+Flask-WTF
+flask-session
+Werkzeug
