@@ -1,4 +1,8 @@
+__pycache__
+.idea/
+
 .env
 .flaskenv
-__pycache__
+flask_session
+
 /schema/populate_likes_table.sql
