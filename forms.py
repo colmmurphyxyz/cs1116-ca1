@@ -10,8 +10,10 @@ color_scheme = {"congo pink": "#ff7070",
 
 class HomePageForm(FlaskForm):
     sort_by = SelectField(label="Show me the ", choices=["most recent", "most popular"],
+                          default="most recent",
                           validators=[InputRequired()])
     recent = SelectField(label="posts from", choices=["today", "this week", "this month", "all time"],
+                         default="this week",
                          validators=[InputRequired()])
     submit = SubmitField("Submit")
 
@@ -43,5 +45,11 @@ class CreatePostForm(FlaskForm):
 class CommentForm(FlaskForm):
     comment = StringField("Comment:",
                           validators=[InputRequired(), Length(max=150)])
+    submit = SubmitField()
+
+class AdminForm(FlaskForm):
+    query = TextAreaField("Enter an SQL query:",
+                          validators=[InputRequired()])
+    output = TextAreaField("Output:")
     submit = SubmitField()
 

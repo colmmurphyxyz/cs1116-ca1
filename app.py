@@ -3,17 +3,31 @@ from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from database import get_db, close_db
-from forms import CommentForm, HomePageForm, RegistrationForm, LoginForm, CreatePostForm, color_scheme
+from forms import AdminForm, CommentForm, HomePageForm, RegistrationForm, LoginForm, CreatePostForm, color_scheme
 from datetime import *
+
+print("Flask")
 
 app = Flask(__name__)
 app.teardown_appcontext(close_db)
-app.config["SECRET_KEY"] = "super-secret-key"
+app.config["SECRET_KEY"] = "super-duper-secret-key"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+print("Done?")
+
+""" ADMIN USERNAME/PASSWORD
+    admin: admin123
+    colm: password
+    
+    usernames are case sensitive btw
+"""
+
 def current_datetime_sql_format():
+    """
+    :return: current time in sqlite format
+    """
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
@@ -34,20 +48,28 @@ def login_required(view):
 
 @app.route("/")
 def root():
-    return render_template("base.html")
+    return render_template("index.html")
 
 
 @app.route("/home", methods=["GET", "POST"])
 def home():
+    if "sort_by" not in session:
+        session["sort_by"] = "most recent"
+    if "recent" not in session:
+        session["recent"] = "this week"
     db = get_db()
     form = HomePageForm()
+    # if the user submits the form, update the sort_by and recent variables in the session store
     if form.validate_on_submit():
         session["sort_by"] = form.sort_by.data
         session["recent"] = form.recent.data
+    # fetch form parameters from session store, or default values if they are not in the session
     sort_by = session.get("sort_by", "most recent")
     recent = session.get("recent", "this week")
 
     if recent == "today":
+        # "today" will show posts from yesterday so long as they were posted in the lsat 24 hours.
+        # this is intentional, not an oversight
         recent_posts_limit = "datetime('now', '-24 hours')"
     elif recent == "this week":
         recent_posts_limit = "datetime('now', '-7 days')"
@@ -68,7 +90,7 @@ def home():
         WHERE submission_time BETWEEN {recent_posts_limit} AND datetime('now')
         GROUP BY post_id
         ORDER BY COUNT(*) DESC;"""
-        # ^ this query will not select posts with 0 likes. It's a design choice, not an error7 ;)
+        # ^ this query will not select posts with 0 likes. It's a design choice, not an error ;)
 
     posts = db.execute(query).fetchall()
     posts_formatted = []
@@ -246,3 +268,38 @@ def view_profile():
             }
         )
     return render_template("profile.html", posts=posts_formatted)
+
+
+@app.route("/admin", methods=["GET", "POST"])
+@login_required
+def admin():
+    db = get_db()
+    user_is_admin = db.execute("SELECT * FROM admins WHERE username = ?;", (session["username"],)).fetchone() is not None
+    close_db()
+    if not user_is_admin:
+        return "Go away, you're not an admin"
+    form = AdminForm()
+    if form.validate_on_submit():
+        query: str = form.query.data
+        db = get_db()
+        if query.startswith("SELECT"):
+            try:
+                output = db.execute(query).fetchall()
+                output_formatted = ""
+                cols = output[0].keys()
+                for row in output:
+                    for col in cols:
+                        output_formatted += f"{row[col]}\t\t"
+                    output_formatted += "\n"
+                output = output_formatted
+            except Exception:
+                output = "an error occured"
+        else:
+            try:
+                db.execute(query)
+                db.commit()
+                output = "everything worked"
+            except Exception:
+                output = "an error occured"
+        form.output.data = output
+    return render_template("admin.html", form=form)

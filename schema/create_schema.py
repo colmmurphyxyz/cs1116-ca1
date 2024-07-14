@@ -53,6 +53,17 @@ CREATE TABLE comments
     submission_time TEXT NOT NULL
 );
 
+DROP TABLE IF EXISTS admins;
+
+CREATE TABLE admins
+(
+    username TEXT PRIMARY KEY NOT NULL
+);
+
+INSERT INTO admins (username) VALUES
+    ('colm'),
+    ('admin');
+
 """)
 
     write_dummy_user_rows(file)
@@ -61,8 +72,9 @@ CREATE TABLE comments
     file.close()
 
 def random_datetime_this_year():
-    start_date = datetime.strptime("2022-01-01 12:00:00", "%Y-%m-%d %H:%M:%S")
-    end_date = datetime.strptime("2022-12-31 12:00:00", "%Y-%m-%d %H:%M:%S")
+    current_year = str(datetime.now().year)
+    start_date = datetime.strptime(f"{current_year}-01-01 12:00:00", "%Y-%m-%d %H:%M:%S")
+    end_date = datetime.now()
     return faker.date_time_between(start_date, end_date).strftime("%Y-%m-%d %H:%M:%S")
 
 
@@ -82,7 +94,7 @@ def write_dummy_post_rows(file):
 
         # generate a string of gibberish for the post
         text = faker.paragraph(nb_sentences=randint(2, 4), variable_nb_sentences=True)
-        # posted sometime in 2022
+        # posted sometime in the current year
         submission_time = random_datetime_this_year()
         file.write(f"   ('{author}', '{text}', '{background}', '{submission_time}'),\n")
     file.write("    ('colmmurphy', 'Hello World', 'green', '2022-03-02 13:31:31');")

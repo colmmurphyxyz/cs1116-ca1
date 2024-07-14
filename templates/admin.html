@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% import 'macros.html' as macros %}
+
+{% block stylesheets %}
+    <style>
+        #output {
+            width: 90vw;
+            height: 75vh;
+        }
+    </style>
+{% endblock %}
+
+{% block main_content %}
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        {{ macros.label_field_errors(form.query) }}
+        <br/>
+        {{ form.output.label }}
+        {{ form.output(disabled=True) }}
+        <br />
+        {{ form.submit() }}
+    </form>
+{% endblock %}
