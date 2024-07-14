@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h1>
+        <a href="{{ url_for('home') }}">Go to the homepage</a>
+    </h1>
+    {% if g.user %}
+        <h1>Welcome back {{ g.user }}. <a href="{{ url_for('view_profile') }}">View your profile</a></h1>
+    {% endif %}
+{% endblock %}
